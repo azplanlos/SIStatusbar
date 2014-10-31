@@ -38,6 +38,7 @@ void SIStatusLog(NSString *format, ...)
         self.doubleValue = 0;
         //NSLog(@"statusbar init");
         [self addObserver:self forKeyPath:NSStringFromSelector(@selector(statusText)) options:NSKeyValueObservingOptionNew context:nil];
+        [self addObserver:self forKeyPath:NSStringFromSelector(@selector(doubleValue)) options:NSKeyValueObservingOptionNew context:nil];
         @synchronized ([SIStatusBar class]) {
             if (!_firstStatusBar) {
                 _firstStatusBar = self;
@@ -50,8 +51,14 @@ void SIStatusLog(NSString *format, ...)
     return self;
 }
 
+-(void)dealloc {
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(statusText))];
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(doubleValue))];
+}
+
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     //NSLog(@"change");
+    if (self.doubleValue >= self.maxValue && self.doubleValue < 0) self.showProgress = NO;
     [self setNeedsDisplay:YES];
     
 }
