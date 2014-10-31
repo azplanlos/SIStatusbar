@@ -8,11 +8,17 @@
 
 #import <Cocoa/Cocoa.h>
 
+//#define NSLog(args...) SIStatusLog(args);
+
+void SIStatusLog(NSString *format, ...);
+
 @interface SIStatusBar : NSView
 
 @property (strong) NSString* statusText;
 @property (assign) double doubleValue;
 @property (assign) double maxValue;
 @property (assign) BOOL showProgress;
+
++(SIStatusBar*)firstStatusBar;
 
 @end

@@ -11,6 +11,23 @@
 @implementation SIStatusBar
 @synthesize statusText, doubleValue, maxValue, showProgress;
 
+static SIStatusBar* _firstStatusBar = nil;
+
+void SIStatusLog(NSString *format, ...)
+{
+    va_list argumentList;
+    va_start(argumentList, format);
+    NSMutableString * message = [[NSMutableString alloc] initWithFormat:format
+                                                              arguments:argumentList];
+    NSLogv(message, argumentList); // Originally NSLog is a wrapper around NSLogv.
+    va_end(argumentList);
+    _firstStatusBar.statusText = message;
+}
+
++(SIStatusBar*)firstStatusBar {
+    return _firstStatusBar;
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -19,14 +36,22 @@
         self.showProgress = NO;
         self.maxValue = 1;
         self.doubleValue = 0;
+        //NSLog(@"statusbar init");
         [self addObserver:self forKeyPath:NSStringFromSelector(@selector(statusText)) options:NSKeyValueObservingOptionNew context:nil];
+        @synchronized ([SIStatusBar class]) {
+            if (!_firstStatusBar) {
+                _firstStatusBar = self;
+                //NSLog(@"saving first status bar");
+            }
+        }
+        
     }
     
     return self;
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    NSLog(@"change");
+    //NSLog(@"change");
     [self setNeedsDisplay:YES];
     
 }
