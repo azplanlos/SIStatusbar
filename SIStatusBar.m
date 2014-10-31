@@ -164,7 +164,7 @@
         
         
         //// Rounded Rectangle 2 Drawing
-        NSBezierPath* roundedRectangle2Path = [NSBezierPath bezierPathWithRoundedRect: NSMakeRect(NSMinX(frame2) + 5, NSMinY(frame2) + 3, NSWidth(frame2) - 97, 10) xRadius: 4 yRadius: 4];
+        NSBezierPath* roundedRectangle2Path = [NSBezierPath bezierPathWithRoundedRect: NSMakeRect(NSMinX(frame2) + 5, NSMinY(frame2) + 3, ((self.doubleValue / self.maxValue)*(NSWidth(frame2)-10)), 10) xRadius: 4 yRadius: 4];
         [gradient2 drawInBezierPath: roundedRectangle2Path angle: -90];
         
         ////// Rounded Rectangle 2 Inner Shadow
@@ -192,9 +192,6 @@
     }
     
     [NSGraphicsContext restoreGraphicsState];
-    
-    
-    
 }
 
 @end
