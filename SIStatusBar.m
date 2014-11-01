@@ -21,7 +21,7 @@ void SIStatusLog(NSString *format, ...)
                                                               arguments:argumentList];
     NSLogv(message, argumentList); // Originally NSLog is a wrapper around NSLogv.
     va_end(argumentList);
-    _firstStatusBar.statusText = message;
+    if (_firstStatusBar) _firstStatusBar.statusText = message;
 }
 
 +(SIStatusBar*)firstStatusBar {
