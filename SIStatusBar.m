@@ -194,32 +194,33 @@ void SIStatusLog(NSString *format, ...)
         [roundedRectanglePath setLineWidth: 1];
         [roundedRectanglePath stroke];
         
-        
-        //// Rounded Rectangle 2 Drawing
-        NSBezierPath* roundedRectangle2Path = [NSBezierPath bezierPathWithRoundedRect: NSMakeRect(NSMinX(frame2) + 5, NSMinY(frame2) + 3, ((self.doubleValue / self.maxValue)*(NSWidth(frame2)-10)), 10) xRadius: 4 yRadius: 4];
-        [gradient2 drawInBezierPath: roundedRectangle2Path angle: -90];
-        
-        ////// Rounded Rectangle 2 Inner Shadow
-        NSRect roundedRectangle2BorderRect = NSInsetRect([roundedRectangle2Path bounds], -shadow.shadowBlurRadius, -shadow.shadowBlurRadius);
-        roundedRectangle2BorderRect = NSOffsetRect(roundedRectangle2BorderRect, -shadow.shadowOffset.width, -shadow.shadowOffset.height);
-        roundedRectangle2BorderRect = NSInsetRect(NSUnionRect(roundedRectangle2BorderRect, [roundedRectangle2Path bounds]), -1, -1);
-        
-        NSBezierPath* roundedRectangle2NegativePath = [NSBezierPath bezierPathWithRect: roundedRectangle2BorderRect];
-        [roundedRectangle2NegativePath appendBezierPath: roundedRectangle2Path];
-        [roundedRectangle2NegativePath setWindingRule: NSEvenOddWindingRule];
-        
-        [NSGraphicsContext saveGraphicsState];
-        {
-            NSShadow* shadowWithOffset = [shadow copy];
-            CGFloat xOffset = shadowWithOffset.shadowOffset.width + round(roundedRectangle2BorderRect.size.width);
-            CGFloat yOffset = shadowWithOffset.shadowOffset.height;
-            shadowWithOffset.shadowOffset = NSMakeSize(xOffset + copysign(0.1, xOffset), yOffset + copysign(0.1, yOffset));
-            [shadowWithOffset set];
-            [[NSColor grayColor] setFill];
-            [roundedRectangle2Path addClip];
-            NSAffineTransform* transform = [NSAffineTransform transform];
-            [transform translateXBy: -round(roundedRectangle2BorderRect.size.width) yBy: 0];
-            [[transform transformBezierPath: roundedRectangle2NegativePath] fill];
+        if (self.doubleValue > 0) {
+            //// Rounded Rectangle 2 Drawing
+            NSBezierPath* roundedRectangle2Path = [NSBezierPath bezierPathWithRoundedRect: NSMakeRect(NSMinX(frame2) + 5, NSMinY(frame2) + 3, ((self.doubleValue / self.maxValue)*(NSWidth(frame2)-10)), 10) xRadius: 4 yRadius: 4];
+            [gradient2 drawInBezierPath: roundedRectangle2Path angle: -90];
+            
+            ////// Rounded Rectangle 2 Inner Shadow
+            NSRect roundedRectangle2BorderRect = NSInsetRect([roundedRectangle2Path bounds], -shadow.shadowBlurRadius, -shadow.shadowBlurRadius);
+            roundedRectangle2BorderRect = NSOffsetRect(roundedRectangle2BorderRect, -shadow.shadowOffset.width, -shadow.shadowOffset.height);
+            roundedRectangle2BorderRect = NSInsetRect(NSUnionRect(roundedRectangle2BorderRect, [roundedRectangle2Path bounds]), -1, -1);
+            
+            NSBezierPath* roundedRectangle2NegativePath = [NSBezierPath bezierPathWithRect: roundedRectangle2BorderRect];
+            [roundedRectangle2NegativePath appendBezierPath: roundedRectangle2Path];
+            [roundedRectangle2NegativePath setWindingRule: NSEvenOddWindingRule];
+            
+            [NSGraphicsContext saveGraphicsState];
+            {
+                NSShadow* shadowWithOffset = [shadow copy];
+                CGFloat xOffset = shadowWithOffset.shadowOffset.width + round(roundedRectangle2BorderRect.size.width);
+                CGFloat yOffset = shadowWithOffset.shadowOffset.height;
+                shadowWithOffset.shadowOffset = NSMakeSize(xOffset + copysign(0.1, xOffset), yOffset + copysign(0.1, yOffset));
+                [shadowWithOffset set];
+                [[NSColor grayColor] setFill];
+                [roundedRectangle2Path addClip];
+                NSAffineTransform* transform = [NSAffineTransform transform];
+                [transform translateXBy: -round(roundedRectangle2BorderRect.size.width) yBy: 0];
+                [[transform transformBezierPath: roundedRectangle2NegativePath] fill];
+            }
         }
     }
     
